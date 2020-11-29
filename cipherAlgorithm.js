@@ -7,10 +7,19 @@ Object.prototype.getKey = function(value){
   return null;
 };
 
+// Encoding and decoding
+
 function encode(plainText, map){
     var encryptedText = "";
     for (i of plainText){
-        encryptedText = encryptedText + map[i];
+        var add = "";
+        if (i == " "){
+            add = " ";
+        }
+        else{
+            add = map[i];
+        }
+        encryptedText = encryptedText + add;
     }
     return encryptedText;
 }
@@ -18,11 +27,19 @@ function encode(plainText, map){
 function decode(encryptedText, map){
     var decodedText = "";
     for (i of encryptedText){
-        decodedText = decodedText + map.getKey(i);
+        var add = "";
+        if (i == " "){
+            add = " ";
+        }
+        else{
+            add = map.getKey(i)
+        }
+        decodedText = decodedText + add;
     }
     return decodedText;
 }
 
+// Generating mapping
 function generateMapping(mappingFunc, processFunc){
     var letters = "abcdefghijklmnopqrstuvwxyz";
     var mapping = {};
@@ -38,11 +55,6 @@ function generateMapping(mappingFunc, processFunc){
     return mapping;
 }
 
-function semiFactorisationMappingFunc(x) {
-    n = (x + 1) / 10;
-    return n ** (-1 * n + 1);
-}
-
 function unequalIntervalProcess(processList) {
     var sortedList = processList.slice(0).sort();
     var resultList = [];
@@ -52,10 +64,8 @@ function unequalIntervalProcess(processList) {
     return resultList;
 }
 
-function caesarMappingFunc(x) {
-    return x + 3;
-}
 
+// Processing types
 function equalIntervalProcess(processList) {
     var resultList = [];
     for (var i of processList) {
@@ -64,5 +74,51 @@ function equalIntervalProcess(processList) {
     return resultList;
 }
 
+// Math functions
+function caesarMappingFunc(x) {
+    return x + 3;
+}
+
+function semiFactorisationMappingFunc(x) {
+    n = (x + 1) / 10;
+    return n ** (-1 * n + 1);
+}
+
+function onClickEncode(){
+    algorithm = document.getElementById("Algorithm").value;
+    plainTxt = document.getElementById("plainText").value;
+    interval = document.getElementById("regularInterval").value;
+    sentence = "var func = function(x){ return " +algorithm+";};";
+    eval(sentence);
+    var processF  = null;
+    if (interval == "true"){
+        processF = equalIntervalProcess;
+    }
+    else{
+        processF = unequalIntervalProcess;
+    }
+    result = encode(plainTxt, generateMapping(func, processF));
+    document.getElementById("encryptedText").innerHTML = result;
+}
+
+function onClickDecode(){
+    algorithm = document.getElementById("Algorithm").value;
+    encText = document.getElementById("encryptText").value;
+    interval = document.getElementById("regularInterval").value;
+    sentence = "var func = function(x){ return " +algorithm+";};";
+    eval(sentence);
+    var processF  = null;
+    if (interval == "true"){
+        processF = equalIntervalProcess;
+    }
+    else{
+        processF = unequalIntervalProcess;
+    }
+    result = decode(encText, generateMapping(func, processF));
+    document.getElementById("decryptedText").innerHTML = result;
+}
+
+console.log(encode("hello world", generateMapping(semiFactorisationMappingFunc, unequalIntervalProcess)));
+console.log(decode("vowwr frmwl", generateMapping(semiFactorisationMappingFunc, unequalIntervalProcess)));
 console.log(generateMapping(semiFactorisationMappingFunc, unequalIntervalProcess));
 console.log(generateMapping(caesarMappingFunc, equalIntervalProcess));
