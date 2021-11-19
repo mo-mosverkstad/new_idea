@@ -1,0 +1,32 @@
+* {
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box;
+    font-family: helvetica;
+}
+
+html, body {
+    width: 900px;
+    margin: auto;
+}
+
+.container, .container2, .container3, .container4 {
+    width: 100%;
+}
+
+button {
+    width: 10%;
+}
+
+.display {
+  width: 100%;
+  padding: 10px 0;
+  text-align: left;
+  background-color: lightblue;
+  margin-top: 10px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+h1{
+    text-align: center;
+}
